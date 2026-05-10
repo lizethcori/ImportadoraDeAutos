@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Vendedor - Importadora Nissan</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-car"></i>
+                    <h1>Importadora Nissan</h1>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="user-details">
+                        <span class="user-name" id="userName">Vendedor</span>
+                        <span class="user-role">Vendedor</span>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Cerrar Sesión
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="dashboard-main">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul class="nav-list">
+                        <li class="nav-item active">
+                            <a href="#" class="nav-link" data-section="overview">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Panel General</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="clients">
+                                <i class="fas fa-users"></i>
+                                <span>Mis Clientes</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="orders">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>Pedidos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="vehicles">
+                                <i class="fas fa-car"></i>
+                                <span>Autos Disponibles</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="quotes">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <span>Cotizaciones</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="tracking">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Seguimiento</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="communication">
+                                <i class="fas fa-comments"></i>
+                                <span>Comunicación</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="commission">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>Comisiones</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="dashboard-content">
+                <!-- Overview Section -->
+                <section id="overview" class="content-section active">
+                    <div class="section-header">
+                        <h2>Panel General</h2>
+                        <p class="section-description">Resumen de tus ventas y desempeño</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number">$45,280</div>
+                                <div class="stat-label">Ventas del Mes</div>
+                                <div class="stat-change positive">+18%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number">28</div>
+                                <div class="stat-label">Clientes Activos</div>
+                                <div class="stat-change positive">+5%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number">12</div>
+                                <div class="stat-label">Pedidos Pendientes</div>
+                                <div class="stat-change negative">-2%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number">85%</div>
+                                <div class="stat-label">Meta de Ventas</div>
+                                <div class="stat-change positive">+12%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-grid">
+                        <div class="card">
+                            <h3>Comisión Acumulada</h3>
+                            <div class="commission-info">
+                                <div class="commission-amount">$3,450</div>
+                                <div class="commission-details">
+                                    <p>Este mes: $2,280</p>
+                                    <p>Mes anterior: $1,170</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3>Acciones Rápidas</h3>
+                            <div class="quick-actions">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-user-plus"></i>
+                                    Nuevo Cliente
+                                </button>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-file-invoice"></i>
+                                    Nueva Cotización
+                                </button>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-car"></i>
+                                    Agregar Auto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Clients Section -->
+                <section id="clients" class="content-section">
+                    <div class="section-header">
+                        <h2>Mis Clientes</h2>
+                        <p class="section-description">Gestiona tu cartera de clientes</p>
+                    </div>
+                    <div class="card">
+                        <div class="client-list">
+                            <div class="client-item">
+                                <div class="client-info">
+                                    <h4>Juan Pérez</h4>
+                                    <p>juan.perez@email.com</p>
+                                </div>
+                                <div class="client-status">
+                                    <span class="status-badge active">Activo</span>
+                                </div>
+                            </div>
+                            <div class="client-item">
+                                <div class="client-info">
+                                    <h4>María García</h4>
+                                    <p>maria.garcia@email.com</p>
+                                </div>
+                                <div class="client-status">
+                                    <span class="status-badge pending">Pendiente</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="orders" class="content-section">
+                    <div class="section-header">
+                        <h2>Gestión de Pedidos</h2>
+                        <p class="section-description">Crea y procesa pedidos de clientes</p>
+                    </div>
+                    <div class="card">
+                        <p>Lista de pedidos en desarrollo...</p>
+                    </div>
+                </section>
+
+                <!-- Vehicles Section -->
+                <section id="vehicles" class="content-section">
+                    <div class="section-header">
+                        <h2>Autos Disponibles</h2>
+                        <p class="section-description">Sube fotos y gestiona tu inventario</p>
+                    </div>
+                    <div class="card">
+                        <div class="vehicle-upload">
+                            <input type="file" id="vehicleImageUpload" accept="image/*" multiple>
+                            <button class="btn btn-primary">Subir Fotos de Autos</button>
+                        </div>
+                        <div class="vehicle-grid">
+                            <!-- Vehicles will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quotes Section -->
+                <section id="quotes" class="content-section">
+                    <div class="section-header">
+                        <h2>Cotizaciones de Importación</h2>
+                        <p class="section-description">Crea cotizaciones para clientes</p>
+                    </div>
+                    <div class="card">
+                        <p>Formulario de cotización en desarrollo...</p>
+                    </div>
+                </section>
+
+                <!-- Tracking Section -->
+                <section id="tracking" class="content-section">
+                    <div class="section-header">
+                        <h2>Seguimiento de Pedidos</h2>
+                        <p class="section-description">Estado actual de tus pedidos</p>
+                    </div>
+                    <div class="card">
+                        <p>Mapa de seguimiento en desarrollo...</p>
+                    </div>
+                </section>
+
+                <!-- Communication Section -->
+                <section id="communication" class="content-section">
+                    <div class="section-header">
+                        <h2>Comunicación con Clientes</h2>
+                        <p class="section-description">Chats con tus clientes</p>
+                    </div>
+                    <div class="card">
+                        <div class="chat-container">
+                            <div class="chat-messages" id="sellerChatMessages"></div>
+                            <input type="text" id="sellerChatInput" placeholder="Escribe tu mensaje...">
+                            <button class="btn btn-primary" id="sendSellerMessage">Enviar</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Commission Section -->
+                <section id="commission" class="content-section">
+                    <div class="section-header">
+                        <h2>Detalles de Comisión</h2>
+                        <p class="section-description">Historial y detalles de tus comisiones</p>
+                    </div>
+                    <div class="card">
+                        <p>Historial de comisiones en desarrollo...</p>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/dashboard-vendedor.js"></script>
+</body>
+</html>
