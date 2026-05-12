@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importadora Nissan</title>
+    
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Estilos del sistema -->
+    <link rel="stylesheet" href="/src/styles/main.css">
+    <link rel="stylesheet" href="/src/styles/dashboard-layout.css">
+    <link rel="stylesheet" href="/src/styles/dashboard-components.css">
+    <link rel="stylesheet" href="/src/styles/dashboard-modals.css">
+    <link rel="stylesheet" href="/src/styles/dashboard-sections.css">
+    <link rel="stylesheet" href="/src/styles/login.css">
+    
+    <!-- Carga de scripts en orden específico -->
+    <!-- 1. Core - Infraestructura fundamental -->
+    <script src="/src/core/event-bus.js"></script>
+    <script src="/src/core/app.js"></script>
+    <script src="/src/core/router.js"></script>
+    <script src="/src/core/base-view.js"></script>
+
+    <!-- 2. Datos - Base de datos mock -->
+    <script src="/src/data/mock-vehicles.js"></script>
+    <script src="/src/data/mock-users.js"></script>
+    <script src="/src/data/mock-orders.js"></script>
+    
+    <!-- 3. Utilidades compartidas -->
+    <script src="/src/utils/formatters.js"></script>
+    <script src="/src/utils/dom-helpers.js"></script>
+
+    <!-- 4. Componentes reutilizables -->
+    <script src="/src/components/toast.js"></script>
+    <script src="/src/components/modal.js"></script>
+    <script src="/src/components/chat.js"></script>
+
+    <!-- 5. Servicios - Lógica de negocio -->
+    <script src="/src/services/mock-backend.js"></script>
+    <script src="/src/services/auth-service.js"></script>
+    <script src="/src/services/vehicle-service.js"></script>
+    <script src="/src/views/login/login-view.js"></script>
+    <script src="/src/views/dashboard/admin-view.js"></script>
+    <script src="/src/views/dashboard/seller-view.js"></script>
+    <script src="/src/views/dashboard/client-view.js"></script>
+</head>
+<body>
+    <!-- Contenedor principal de la aplicación -->
+    <div id="app">
+        <div style="text-align: center; padding: 50px;">
+            <h1>🚗 Importadora Nissan</h1>
+            <p>Cargando aplicación...</p>
+        </div>
+    </div>
+
+    <!-- Panel de debug (solo visible en localhost) -->
+    <script>
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            const debugPanel = document.createElement('div');
+            debugPanel.className = 'debug-panel';
+            debugPanel.innerHTML = `
+                <h3>🔧 Debug Panel</h3>
+                <div id="debug-status">Inicializando...</div>
+                <div id="debug-user">Usuario: -</div>
+                <div id="debug-route">Ruta: -</div>
+                <div id="debug-services">Servicios: -</div>
+            `;
+            document.body.appendChild(debugPanel);
+            
+            // Actualizar debug panel
+            function updateDebugPanel() {
+                const statusEl = document.getElementById('debug-status');
+                const userEl = document.getElementById('debug-user');
+                const routeEl = document.getElementById('debug-route');
+                const servicesEl = document.getElementById('debug-services');
+                
+                if (statusEl) {
+                    const appStatus = window.Importadora?.App?.getStatus();
+                    statusEl.innerHTML = appStatus ? 
+                        `<span class="status">✅ App OK</span><br>Módulos: ${appStatus.modulesCount}<br>Servicios: ${appStatus.servicesCount}` : 
+                        '<span class="error">❌ App no lista</span>';
+                }
+                
+                if (userEl) {
+                    const authStatus = window.Importadora?.Services?.AuthService?.getStats();
+                    userEl.innerHTML = authStatus ? 
+                        (authStatus.authenticated ? 
+                            `👤 ${authStatus.currentUser?.name} (${authStatus.currentUser?.role})` : 
+                            '🔒 No autenticado') : 
+                        '🔒 Auth no disponible';
+                }
+                
+                if (routeEl) {
+                    const currentRoute = window.Importadora?.Core?.Router?.getCurrentRoute();
+                    routeEl.innerHTML = currentRoute ? `🛣️ ${currentRoute}` : '🛣️ Sin ruta';
+                }
+                
+                if (servicesEl) {
+                    const services = [];
+                    if (window.Importadora?.Services?.MockBackend) services.push('🌐 MockBackend');
+                    if (window.Importadora?.Services?.AuthService) services.push('🔐 Auth');
+                    if (window.Importadora?.Services?.VehicleService) services.push('🚗 Vehicles');
+                    servicesEl.innerHTML = services.length > 0 ? services.join(' ') : '❌ Sin servicios';
+                }
+            }
+            
+            // Actualizar cada segundo
+            setInterval(updateDebugPanel, 1000);
+            
+            // Actualizar cuando la app esté lista
+            if (window.Importadora?.Core?.EventBus) {
+                window.Importadora.Core.EventBus.on('app:initialized', updateDebugPanel);
+                window.Importadora.Core.EventBus.on('router:changed', updateDebugPanel);
+                window.Importadora.Core.EventBus.on('auth:loginSuccess', updateDebugPanel);
+                window.Importadora.Core.EventBus.on('auth:logout', updateDebugPanel);
+            }
+        }
+    </script>
+
+    <!-- Script de inicialización -->
+    <script>
+        // Esperar a que todo esté cargado
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📄 DOM cargado, iniciando aplicación...');
+            
+            // Inicializar router con event bus
+            if (window.Importadora?.Core?.Router && window.Importadora?.Core?.EventBus) {
+                window.Importadora.Core.Router.init(window.Importadora.Core.EventBus);
+            }
+            
+            // Navegar a login por defecto
+            setTimeout(() => {
+                if (window.Importadora?.Core?.Router) {
+                    if (!window.location.hash) {
+                        window.Importadora.Core.Router.navigate('/login');
+                    }
+                }
+            }, 100);
+        });
+        
+        // Manejar errores globales
+        window.addEventListener('error', function(event) {
+            console.error('❌ Error global:', event.error);
+        });
+        
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('❌ Promesa rechazada:', event.reason);
+        });
+    </script>
+</body>
+</html>

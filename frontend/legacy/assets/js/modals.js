@@ -1,5 +1,5 @@
 // Modals Module
-let modalOpen = false;
+let genericModalOpen = false;
 
 // Generic modal functions
 function createModal(title, content, footerButtons = []) {
@@ -28,7 +28,7 @@ function createModal(title, content, footerButtons = []) {
     // Show modal
     setTimeout(() => {
         modal.classList.add('active');
-        modalOpen = true;
+        genericModalOpen = true;
     }, 100);
     
     // Close on outside click
@@ -49,7 +49,7 @@ function closeGenericModal() {
             modal.remove();
         }, 300);
     });
-    modalOpen = false;
+    genericModalOpen = false;
 }
 
 // Alert modal
@@ -117,5 +117,5 @@ function hideLoading() {
             modal.remove();
         }, 300);
     });
-    modalOpen = false;
+    genericModalOpen = false;
 }

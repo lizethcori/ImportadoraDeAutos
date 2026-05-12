@@ -77,13 +77,7 @@
                                 <span>Mis Pedidos</span>
                             </a>
                         </li>
-                                                <li class="nav-item">
-                            <a href="#" class="nav-link" data-section="documents">
-                                <i class="fas fa-file-upload"></i>
-                                <span>Documentos</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
+                                                                        <li class="nav-item">
                             <a href="#" class="nav-link" data-section="tracking">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <span>Seguimiento</span>
@@ -378,7 +372,8 @@
                                 <div class="order-actions">
                                     <button class="btn btn-outline btn-sm" onclick="showOrderDetails('ORD-001', 'Nissan Big Thumb 2024')">Ver Detalles</button>
                                     <button class="btn btn-outline btn-sm" onclick="showOrderDocuments('ORD-001')">Documentos</button>
-                                    <button class="btn btn-primary btn-sm" onclick="directToOrderChat('ORD-001', 'Nissan Big Thumb 2024')">Chat con Vendedor</button>
+                                    <button class="btn btn-primary btn-sm" onclick="showOrderTracking('ORD-001')">Seguimiento</button>
+                                    <button class="btn btn-success btn-sm" onclick="directToOrderChat('ORD-001', 'Nissan Big Thumb 2024')">Chat con Vendedor</button>
                                 </div>
                             </div>
                             
@@ -418,7 +413,8 @@
                                 <div class="order-actions">
                                     <button class="btn btn-outline btn-sm" onclick="showOrderDetails('ORD-002', 'Nissan Diesel UD 2024')">Ver Detalles</button>
                                     <button class="btn btn-outline btn-sm" onclick="showOrderDocuments('ORD-002')">Documentos</button>
-                                    <button class="btn btn-primary btn-sm" onclick="directToOrderChat('ORD-002', 'Nissan Diesel UD 2024')">Chat con Vendedor</button>
+                                    <button class="btn btn-primary btn-sm" onclick="showOrderTracking('ORD-002')">Seguimiento</button>
+                                    <button class="btn btn-success btn-sm" onclick="directToOrderChat('ORD-002', 'Nissan Diesel UD 2024')">Chat con Vendedor</button>
                                 </div>
                             </div>
                             
@@ -458,6 +454,7 @@
                                 <div class="order-actions">
                                     <button class="btn btn-outline btn-sm" onclick="showOrderDetails('ORD-003', 'Nissan Atlas 2024')">Ver Detalles</button>
                                     <button class="btn btn-outline btn-sm" onclick="showOrderDocuments('ORD-003')">Documentos</button>
+                                    <button class="btn btn-primary btn-sm" onclick="showOrderTracking('ORD-003')">Seguimiento</button>
                                     <button class="btn btn-success btn-sm">Comprar Nuevamente</button>
                                 </div>
                             </div>
@@ -476,18 +473,7 @@
                     </div>
                 </section>
 
-                <!-- Documents Section -->
-                <section id="documents" class="content-section">
-                    <div class="section-header">
-                        <h2>Subir Documentos</h2>
-                        <p class="section-description">Sube los documentos necesarios para el papeleo</p>
-                    </div>
-                    <div class="card">
-                        <input type="file" id="documentUpload" multiple>
-                        <button class="btn btn-primary">Subir Documentos</button>
-                    </div>
-                </section>
-
+                
                 <!-- Tracking Section -->
                 <section id="tracking" class="content-section">
                     <div class="section-header">
@@ -566,14 +552,7 @@
                             </div>
                         </div>
 
-                        <!-- Documentos -->
-                        <div class="documents-section">
-                            <h4>Documentos para este Estado</h4>
-                            <div class="documents-list" id="documentsList">
-                                <p class="no-documents">Sin documentos especificados</p>
-                            </div>
-                        </div>
-
+                        
                         <!-- Mapa -->
                         <div class="map-section">
                             <div class="map-container">
@@ -901,6 +880,103 @@
             <div class="modal-footer">
                 <button class="btn btn-outline" onclick="closeProfileModal()">Cancelar</button>
                 <button class="btn btn-primary" onclick="saveProfile()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tracking Modal -->
+    <div id="trackingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Seguimiento de mi Pedido</h2>
+                <button class="close-btn" onclick="closeTrackingModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- Estado Actual -->
+                <div class="tracking-status">
+                    <div class="status-info">
+                        <h3>Estado Actual: <span class="status-current" id="modalCurrentStatus">COTIZACIÓN</span></h3>
+                        <p>Ubicación estimada: <span class="location-current" id="modalCurrentLocation">Ubicación desconocida</span></p>
+                    </div>
+                </div>
+
+                <!-- Barra de Progreso -->
+                <div class="progress-container">
+                    <div class="progress-line">
+                        <div class="progress-fill" id="modalProgressFill"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="step" data-step="1">
+                            <div class="step-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="step-text">Pedido Confirmado</div>
+                        </div>
+                        <div class="step" data-step="2">
+                            <div class="step-icon">
+                                <i class="fas fa-ship"></i>
+                            </div>
+                            <div class="step-text">En Puerto Iquique</div>
+                        </div>
+                        <div class="step" data-step="3">
+                            <div class="step-icon">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <div class="step-text">Control Colchane</div>
+                        </div>
+                        <div class="step" data-step="4">
+                            <div class="step-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="step-text">En Transporte</div>
+                        </div>
+                        <div class="step" data-step="5">
+                            <div class="step-icon">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <div class="step-text">Control Pisiga</div>
+                        </div>
+                        <div class="step" data-step="6">
+                            <div class="step-icon">
+                                <i class="fas fa-warehouse"></i>
+                            </div>
+                            <div class="step-text">En Depósito Oruro</div>
+                        </div>
+                        <div class="step" data-step="7">
+                            <div class="step-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="step-text">En Transporte La Paz</div>
+                        </div>
+                        <div class="step" data-step="8">
+                            <div class="step-icon">
+                                <i class="fas fa-warehouse"></i>
+                            </div>
+                            <div class="step-text">En Almacén Cochabamba</div>
+                        </div>
+                        <div class="step" data-step="9">
+                            <div class="step-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="step-text">Listo para Entrega</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mapa -->
+                <div class="map-section">
+                    <div class="map-container">
+                        <div id="modalTrackingMap" class="tracking-map"></div>
+                        <div class="map-controls">
+                            <button class="btn btn-sm btn-outline" onclick="resetModalMapView()">
+                                <i class="fas fa-compress"></i> Resetear Vista
+                            </button>
+                            <button class="btn btn-sm btn-outline" onclick="toggleModalRouteVisibility()">
+                                <i class="fas fa-route"></i> Mostrar Ruta
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

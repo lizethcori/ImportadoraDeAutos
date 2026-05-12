@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Vendedor - Importadora Nissan</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-car"></i>
+                    <h1>Importadora Nissan</h1>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="user-details">
+                        <span class="user-name" id="userName">Vendedor</span>
+                        <span class="user-role">Vendedor</span>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Cerrar Sesión
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="dashboard-main">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul class="nav-list">
+                        <li class="nav-item active">
+                            <a href="#" class="nav-link" data-section="overview">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Panel General</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="clients">
+                                <i class="fas fa-users"></i>
+                                <span>Mis Clientes</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="orders">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>Pedidos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="vehicles">
+                                <i class="fas fa-car"></i>
+                                <span>Autos Disponibles</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="quotes">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <span>Cotizaciones</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="tracking">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Seguimiento</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="communication">
+                                <i class="fas fa-comments"></i>
+                                <span>Comunicación</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-section="commission">
+                                <i class="fas fa-dollar-sign"></i>
+                                <span>Comisiones</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="dashboard-content">
+                <!-- Overview Section -->
+                <section id="overview" class="content-section active">
+                    <div class="section-header">
+                        <h2>Panel General</h2>
+                        <p class="section-description">Resumen de tus ventas y desempeño</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number">$45,280</div>
+                                <div class="stat-label">Ventas del Mes</div>
+                                <div class="stat-change positive">+18%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number">28</div>
+                                <div class="stat-label">Clientes Activos</div>
+                                <div class="stat-change positive">+5%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number">12</div>
+                                <div class="stat-label">Pedidos Pendientes</div>
+                                <div class="stat-change negative">-2%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-number">85%</div>
+                                <div class="stat-label">Meta de Ventas</div>
+                                <div class="stat-change positive">+12%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-grid">
+                        <div class="card">
+                            <h3>Comisión Acumulada</h3>
+                            <div class="commission-info">
+                                <div class="commission-amount">$3,450</div>
+                                <div class="commission-details">
+                                    <p>Este mes: $2,280</p>
+                                    <p>Mes anterior: $1,170</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3>Acciones Rápidas</h3>
+                            <div class="quick-actions">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-user-plus"></i>
+                                    Nuevo Cliente
+                                </button>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-file-invoice"></i>
+                                    Nueva Cotización
+                                </button>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-car"></i>
+                                    Agregar Auto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Clients Section -->
+                <section id="clients" class="content-section">
+                    <div class="section-header">
+                        <h2>Mis Clientes</h2>
+                        <p class="section-description">Gestiona tu cartera de clientes</p>
+                    </div>
+                    <div class="card">
+                        <div class="client-list">
+                            <div class="client-item">
+                                <div class="client-info">
+                                    <h4>Juan Pérez</h4>
+                                    <p>juan.perez@email.com</p>
+                                </div>
+                                <div class="client-status">
+                                    <span class="status-badge active">Activo</span>
+                                </div>
+                            </div>
+                            <div class="client-item">
+                                <div class="client-info">
+                                    <h4>María García</h4>
+                                    <p>maria.garcia@email.com</p>
+                                </div>
+                                <div class="client-status">
+                                    <span class="status-badge pending">Pendiente</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="orders" class="content-section">
+                    <div class="section-header">
+                        <h2>Gestión de Pedidos</h2>
+                        <p class="section-description">Crea y procesa pedidos de clientes</p>
+                    </div>
+                    <div class="card">
+                        <!-- Filtros -->
+                        <div class="orders-filters">
+                            <button class="btn btn-primary active" data-filter="all">Todos</button>
+                            <button class="btn btn-outline" data-filter="pending">Pendientes</button>
+                            <button class="btn btn-outline" data-filter="processing">En Proceso</button>
+                            <button class="btn btn-outline" data-filter="completed">Completados</button>
+                        </div>
+                        
+                        <div class="orders-search">
+                            <input type="text" id="orderSearch" placeholder="Buscar pedidos por vehículo o cliente..." class="search-input">
+                            <button class="btn btn-primary search-btn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="orders-list" id="ordersList">
+                            <!-- Pedido 1 -->
+                            <div class="order-card" data-status="processing">
+                                <div class="order-header">
+                                    <div class="order-info">
+                                        <h3 class="order-vehicle">Nissan Big Thumb 2024</h3>
+                                        <span class="order-id">#ORD-001</span>
+                                    </div>
+                                    <span class="order-status status-processing">En Proceso</span>
+                                </div>
+                                <div class="order-details">
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-user"></i>
+                                        <span>Cliente: Juan Pérez</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span>Tel: +591 71234567</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>Fecha: 15/04/2026</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-tag"></i>
+                                        <span>Tipo: Importación</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        <span>Precio: USD 85,000</span>
+                                    </div>
+                                </div>
+                                <div class="order-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 40%"></div>
+                                    </div>
+                                    <span class="progress-text">40% completado</span>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn btn-outline btn-sm" onclick="showOrderDetails('ORD-001', 'Nissan Big Thumb 2024')">Ver Detalles</button>
+                                    <button class="btn btn-primary btn-sm" onclick="showOrderTracking('ORD-001')">Seguimiento</button>
+                                    <button class="btn btn-success btn-sm" onclick="directToOrderChat('ORD-001', 'Nissan Big Thumb 2024')">Chat con Cliente</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Pedido 2 -->
+                            <div class="order-card" data-status="pending">
+                                <div class="order-header">
+                                    <div class="order-info">
+                                        <h3 class="order-vehicle">Nissan Diesel UD 2024</h3>
+                                        <span class="order-id">#ORD-002</span>
+                                    </div>
+                                    <span class="order-status status-pending">Pendiente</span>
+                                </div>
+                                <div class="order-details">
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-user"></i>
+                                        <span>Cliente: María García</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span>Tel: +591 72345678</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>Fecha: 20/04/2026</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-tag"></i>
+                                        <span>Tipo: Compra Directa</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        <span>Precio: USD 95,000</span>
+                                    </div>
+                                </div>
+                                <div class="order-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 10%"></div>
+                                    </div>
+                                    <span class="progress-text">10% completado</span>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn btn-outline btn-sm" onclick="showOrderDetails('ORD-002', 'Nissan Diesel UD 2024')">Ver Detalles</button>
+                                    <button class="btn btn-primary btn-sm" onclick="showOrderTracking('ORD-002')">Seguimiento</button>
+                                    <button class="btn btn-success btn-sm" onclick="directToOrderChat('ORD-002', 'Nissan Diesel UD 2024')">Chat con Cliente</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Pedido 3 -->
+                            <div class="order-card" data-status="completed">
+                                <div class="order-header">
+                                    <div class="order-info">
+                                        <h3 class="order-vehicle">Nissan Atlas 2024</h3>
+                                        <span class="order-id">#ORD-003</span>
+                                    </div>
+                                    <span class="order-status status-completed">Completado</span>
+                                </div>
+                                <div class="order-details">
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-user"></i>
+                                        <span>Cliente: Carlos Rodríguez</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span>Tel: +591 73456789</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>Fecha: 10/04/2026</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-tag"></i>
+                                        <span>Tipo: Importación</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        <span>Precio: USD 75,000</span>
+                                    </div>
+                                </div>
+                                <div class="order-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 100%"></div>
+                                    </div>
+                                    <span class="progress-text">100% completado</span>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn btn-outline btn-sm" onclick="showOrderDetails('ORD-003', 'Nissan Atlas 2024')">Ver Detalles</button>
+                                    <button class="btn btn-primary btn-sm" onclick="showOrderTracking('ORD-003')">Seguimiento</button>
+                                    <button class="btn btn-success btn-sm">Comprar Nuevamente</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Vehicles Section -->
+                <section id="vehicles" class="content-section">
+                    <div class="section-header">
+                        <h2>Autos Disponibles</h2>
+                        <p class="section-description">Sube fotos y gestiona tu inventario</p>
+                    </div>
+                    <div class="card">
+                        <div class="vehicle-upload">
+                            <input type="file" id="vehicleImageUpload" accept="image/*" multiple>
+                            <button class="btn btn-primary">Subir Fotos de Autos</button>
+                        </div>
+                        <div class="vehicle-grid">
+                            <!-- Vehicles will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quotes Section -->
+                <section id="quotes" class="content-section">
+                    <div class="section-header">
+                        <h2>Cotizaciones de Importación</h2>
+                        <p class="section-description">Crea cotizaciones para clientes</p>
+                    </div>
+                    <div class="card">
+                        <p>Formulario de cotización en desarrollo...</p>
+                    </div>
+                </section>
+
+                <!-- Tracking Section -->
+                <section id="tracking" class="content-section">
+                    <div class="section-header">
+                        <h2>Seguimiento de Pedidos</h2>
+                        <p class="section-description">Estado actual de tus pedidos</p>
+                    </div>
+                    <div class="card">
+                        <p>Mapa de seguimiento en desarrollo...</p>
+                    </div>
+                </section>
+
+                <!-- Communication Section -->
+                <section id="communication" class="content-section">
+                    <div class="section-header">
+                        <h2>Comunicación con Clientes</h2>
+                        <p class="section-description">Chats con tus clientes</p>
+                    </div>
+                    <div class="card">
+                        <div class="chat-container">
+                            <div class="chat-messages" id="sellerChatMessages"></div>
+                            <input type="text" id="sellerChatInput" placeholder="Escribe tu mensaje...">
+                            <button class="btn btn-primary" id="sendSellerMessage">Enviar</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Commission Section -->
+                <section id="commission" class="content-section">
+                    <div class="section-header">
+                        <h2>Detalles de Comisión</h2>
+                        <p class="section-description">Historial y detalles de tus comisiones</p>
+                    </div>
+                    <div class="card">
+                        <p>Historial de comisiones en desarrollo...</p>
+                    </div>
+                </section>
+            </main>
+        <!-- Message Container -->
+        <div id="messageContainer" class="message-container"></div>
+
+        <!-- Tracking Modal -->
+        <div id="trackingModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Seguimiento de Pedido</h2>
+                    <button class="close-btn" onclick="closeTrackingModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Estado Actual -->
+                    <div class="tracking-status">
+                        <div class="status-info">
+                            <h3>Estado Actual: <span class="status-current" id="modalCurrentStatus">COTIZACIÓN</span></h3>
+                            <p>Ubicación estimada: <span class="location-current" id="modalCurrentLocation">Ubicación desconocida</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Progreso -->
+                    <div class="progress-container">
+                        <div class="progress-line">
+                            <div class="progress-fill" id="modalProgressFill"></div>
+                        </div>
+                        <div class="progress-steps">
+                            <div class="step" data-step="1">
+                                <div class="step-icon">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="step-text">Pedido Confirmado</div>
+                            </div>
+                            <div class="step" data-step="2">
+                                <div class="step-icon">
+                                    <i class="fas fa-ship"></i>
+                                </div>
+                                <div class="step-text">En Puerto Iquique</div>
+                            </div>
+                            <div class="step" data-step="3">
+                                <div class="step-icon">
+                                    <i class="fas fa-clipboard-check"></i>
+                                </div>
+                                <div class="step-text">Control Colchane</div>
+                            </div>
+                            <div class="step" data-step="4">
+                                <div class="step-icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div class="step-text">En Transporte</div>
+                            </div>
+                            <div class="step" data-step="5">
+                                <div class="step-icon">
+                                    <i class="fas fa-clipboard-check"></i>
+                                </div>
+                                <div class="step-text">Control Pisiga</div>
+                            </div>
+                            <div class="step" data-step="6">
+                                <div class="step-icon">
+                                    <i class="fas fa-warehouse"></i>
+                                </div>
+                                <div class="step-text">En Depósito Oruro</div>
+                            </div>
+                            <div class="step" data-step="7">
+                                <div class="step-icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div class="step-text">En Transporte La Paz</div>
+                            </div>
+                            <div class="step" data-step="8">
+                                <div class="step-icon">
+                                    <i class="fas fa-warehouse"></i>
+                                </div>
+                                <div class="step-text">En Almacén Cochabamba</div>
+                            </div>
+                            <div class="step" data-step="9">
+                                <div class="step-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="step-text">Listo para Entrega</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mapa -->
+                    <div class="map-section">
+                        <div class="map-container">
+                            <div id="modalTrackingMap" class="tracking-map"></div>
+                            <div class="map-controls">
+                                <button class="btn btn-sm btn-outline" onclick="resetModalMapView()">
+                                    <i class="fas fa-compress"></i> Resetear Vista
+                                </button>
+                                <button class="btn btn-sm btn-outline" onclick="toggleModalRouteVisibility()">
+                                    <i class="fas fa-route"></i> Mostrar Ruta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scripts -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script src="../assets/js/auth.js"></script>
+        <script src="../assets/js/dashboard-vendedor.js"></script>
+    </body>
+</html>

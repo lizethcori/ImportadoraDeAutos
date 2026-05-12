@@ -31,6 +31,139 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Dashboard vendedor loaded');
 });
 
+// Funciones para el Modal de Seguimiento
+function showOrderTracking(orderId) {
+    // Cargar datos específicos del pedido
+    loadOrderTrackingData(orderId);
+    
+    // Mostrar modal
+    const modal = document.getElementById('trackingModal');
+    if (modal) {
+        modal.style.display = 'block';
+        
+        // Inicializar mapa si es necesario
+        setTimeout(() => {
+            initializeModalMap();
+        }, 100);
+    }
+}
+
+function closeTrackingModal() {
+    const modal = document.getElementById('trackingModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function loadOrderTrackingData(orderId) {
+    // Datos de ejemplo para diferentes pedidos
+    const orderData = {
+        'ORD-001': {
+            status: 'EN TRANSPORTE',
+            location: 'Control Colchane',
+            progress: 40,
+            currentStep: 3
+        },
+        'ORD-002': {
+            status: 'COTIZACIÓN',
+            location: 'Oficina Central',
+            progress: 10,
+            currentStep: 1
+        },
+        'ORD-003': {
+            status: 'ENTREGADO',
+            location: 'Almacén Cochabamba',
+            progress: 100,
+            currentStep: 9
+        }
+    };
+    
+    const data = orderData[orderId] || orderData['ORD-001'];
+    
+    // Actualizar estado y ubicación
+    const statusElement = document.getElementById('modalCurrentStatus');
+    const locationElement = document.getElementById('modalCurrentLocation');
+    const progressElement = document.getElementById('modalProgressFill');
+    
+    if (statusElement) statusElement.textContent = data.status;
+    if (locationElement) locationElement.textContent = data.location;
+    if (progressElement) progressElement.style.width = data.progress + '%';
+    
+    // Actualizar pasos del progreso
+    updateProgressSteps(data.currentStep);
+}
+
+function updateProgressSteps(currentStep) {
+    const steps = document.querySelectorAll('#trackingModal .step');
+    steps.forEach((step, index) => {
+        const stepNumber = index + 1;
+        const icon = step.querySelector('.step-icon');
+        
+        if (stepNumber < currentStep) {
+            // Pasos completados
+            step.classList.add('completed');
+            icon.innerHTML = '<i class="fas fa-check"></i>';
+        } else if (stepNumber === currentStep) {
+            // Paso actual
+            step.classList.add('active');
+            icon.innerHTML = '<i class="fas fa-clock"></i>';
+        } else {
+            // Pasos futuros
+            step.classList.remove('completed', 'active');
+        }
+    });
+}
+
+function initializeModalMap() {
+    const mapContainer = document.getElementById('modalTrackingMap');
+    if (!mapContainer || mapContainer._leaflet) return; // Evitar inicialización múltiple
+    
+    // Inicializar mapa (similar al del dashboard cliente)
+    const map = L.map('modalTrackingMap').setView([-16.290154, -63.588653], 5);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    
+    // Guardar referencia al mapa
+    mapContainer._leaflet = map;
+    
+    // Agregar marcadores de ruta (ejemplo)
+    const routePoints = [
+        {lat: -20.220633, lng: -70.147321, name: "Iquique, Chile"},
+        {lat: -19.571940, lng: -65.755943, name: "Colchane, Bolivia"},
+        {lat: -17.966831, lng: -67.110236, name: "Oruro, Bolivia"},
+        {lat: -16.500000, lng: -68.150000, name: "La Paz, Bolivia"},
+        {lat: -17.413977, lng: -66.165321, name: "Cochabamba, Bolivia"}
+    ];
+    
+    routePoints.forEach(point => {
+        L.marker([point.lat, point.lng])
+            .addTo(map)
+            .bindPopup(point.name);
+    });
+}
+
+function resetModalMapView() {
+    const mapContainer = document.getElementById('modalTrackingMap');
+    if (mapContainer && mapContainer._leaflet) {
+        mapContainer._leaflet.setView([-16.290154, -63.588653], 5);
+    }
+}
+
+function toggleModalRouteVisibility() {
+    // Implementar visibilidad de ruta si es necesario
+    console.log('Toggle route visibility');
+}
+
+// Cerrar modal al hacer clic fuera
+window.onclick = function(event) {
+    const modal = document.getElementById('trackingModal');
+    if (event.target === modal) {
+        closeTrackingModal();
+    }
+}
+
 function updateUserInfo() {
     const currentUser = auth.getCurrentUser();
     const userNameElement = document.getElementById('userName');

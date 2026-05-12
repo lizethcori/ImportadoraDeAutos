@@ -3500,11 +3500,26 @@ input:checked + .toggle-label:before {
   color: var(--text-primary);
 }
 
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xl);
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
 .modal-close {
   background: none;
   border: none;
   color: var(--text-secondary);
-  font-size: 1.5em;
   cursor: pointer;
   padding: var(--spacing-sm);
 }
