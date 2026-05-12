@@ -202,6 +202,25 @@
                                             <div class="step" data-step="9"><div class="step-icon"><i class="fas fa-check-circle"></i></div><div class="step-text">Listo para Entrega</div></div>
                                         </div>
                                     </div>
+                                    <div class="map-section">
+                                        <div id="trackingMap" class="tracking-map"></div>
+                                    </div>
+                                    <div class="documents-section">
+                                        <div class="section-header">
+                                            <h3><i class="fas fa-folder"></i> Documentos del Pedido</h3>
+                                        </div>
+                                        <div class="upload-area" id="uploadArea">
+                                            <div class="upload-content">
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                                <p>Arrastra archivos aquí o</p>
+                                                <button class="btn btn-secondary" id="selectFileBtn">Seleccionar archivo</button>
+                                                <input type="file" id="fileInput" style="display: none;" multiple>
+                                            </div>
+                                        </div>
+                                        <div class="documents-list" id="documentsList">
+                                            <p style="text-align:center; padding:20px; color:var(--text-secondary);">Cargando documentos...</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </section>
 
@@ -283,9 +302,6 @@
 
                 this.loadCatalog(vehicles);
                 this.loadOrdersList(orders);
-
-                // Re-setup event listeners after dynamic content is loaded
-                this.setupOrderActionButtons();
 
             } catch (error) {
                 console.error('❌ Error cargando datos del dashboard:', error);
@@ -401,6 +417,9 @@
 
             // Chat
             this.setupChat();
+
+            // Document upload
+            this.setupDocumentUpload();
         }
 
         setupCatalogSearch() {
@@ -501,6 +520,20 @@
                         if (statusEl) statusEl.textContent = order.status;
                         if (locationEl) locationEl.textContent = order.location || 'En proceso';
                         if (progressFill) progressFill.style.width = `${order.progress || 0}%`;
+
+                        // Initialize and update map
+                        const mapService = window.Importadora.Components.MapService;
+                        if (mapService && !mapService.isReady()) {
+                            mapService.init('trackingMap');
+                        }
+
+                        // Update current position on map
+                        if (mapService && mapService.isReady()) {
+                            mapService.updateCurrentPosition(order.progress || 0, order.status);
+                        }
+
+                        // Load documents for this order
+                        this.loadOrderDocuments(orderId);
                     }
                 } catch (error) {
                     console.error('Error al cargar tracking:', error);
@@ -890,6 +923,261 @@
                 console.error('Error al cargar detalles del pedido:', error);
                 window.Importadora.Components.Toast.show('Error al cargar detalles', 'error');
             }
+        }
+
+        /**
+         * Cargar documentos del pedido
+         * @param {string} orderId - ID del pedido
+         */
+        async loadOrderDocuments(orderId) {
+            try {
+                const order = await this.mockBackend.getOrderById(orderId);
+                const documentsList = document.getElementById('documentsList');
+
+                if (!documentsList) return;
+
+                if (!order || !order.documents || order.documents.length === 0) {
+                    documentsList.innerHTML = '<p class="no-documents">No hay documentos para este pedido</p>';
+                    return;
+                }
+
+                documentsList.innerHTML = order.documents.map(doc => `
+                    <div class="document-item" data-document-id="${doc.id}">
+                        <div class="document-icon">
+                            <i class="${this.getFileIcon(doc.type)}"></i>
+                        </div>
+                        <div class="document-info">
+                            <h4>${doc.name}</h4>
+                            <div class="document-meta">
+                                <span>${doc.uploadDate}</span>
+                                <span>•</span>
+                                <span>${doc.size}</span>
+                            </div>
+                        </div>
+                        <div class="document-actions">
+                            <button class="btn btn-outline download-doc-btn" data-document-id="${doc.id}">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="btn btn-outline delete-doc-btn" data-document-id="${doc.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Agregar event listeners para botones de documentos
+                this.setupDocumentActions(orderId);
+
+            } catch (error) {
+                console.error('Error al cargar documentos:', error);
+                const documentsList = document.getElementById('documentsList');
+                if (documentsList) {
+                    documentsList.innerHTML = '<p class="no-documents">Error al cargar documentos</p>';
+                }
+            }
+        }
+
+        /**
+         * Configurar acciones de documentos (descargar, eliminar)
+         * @param {string} orderId - ID del pedido
+         */
+        setupDocumentActions(orderId) {
+            // Download buttons
+            document.querySelectorAll('.download-doc-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const docId = e.currentTarget.getAttribute('data-document-id');
+                    this.downloadDocument(docId);
+                });
+            });
+
+            // Delete buttons
+            document.querySelectorAll('.delete-doc-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const docId = e.currentTarget.getAttribute('data-document-id');
+                    this.deleteDocument(docId, orderId);
+                });
+            });
+        }
+
+        /**
+         * Obtener icono según tipo de archivo
+         * @param {string} fileType - Tipo de archivo
+         * @returns {string} Clase de icono Font Awesome
+         */
+        getFileIcon(fileType) {
+            const iconMap = {
+                'pdf': 'fas fa-file-pdf',
+                'doc': 'fas fa-file-word',
+                'docx': 'fas fa-file-word',
+                'xls': 'fas fa-file-excel',
+                'xlsx': 'fas fa-file-excel',
+                'jpg': 'fas fa-file-image',
+                'jpeg': 'fas fa-file-image',
+                'png': 'fas fa-file-image',
+                'zip': 'fas fa-file-archive',
+                'rar': 'fas fa-file-archive'
+            };
+            return iconMap[fileType?.toLowerCase()] || 'fas fa-file';
+        }
+
+        /**
+         * Descargar documento (simulado)
+         * @param {string} docId - ID del documento
+         */
+        downloadDocument(docId) {
+            console.log('📥 Descargando documento:', docId);
+            window.Importadora.Components.Toast.show('Documento descargado (simulado)', 'success');
+        }
+
+        /**
+         * Eliminar documento (simulado en memoria)
+         * @param {string} docId - ID del documento
+         * @param {string} orderId - ID del pedido
+         */
+        deleteDocument(docId, orderId) {
+            console.log('🗑️ Eliminando documento:', docId, 'del pedido:', orderId);
+
+            // En una implementación real, esto llamaría a la API
+            // Por ahora, solo eliminamos del DOM
+            const docItem = document.querySelector(`.document-item[data-document-id="${docId}"]`);
+            if (docItem) {
+                docItem.style.opacity = '0';
+                setTimeout(() => docItem.remove(), 300);
+            }
+
+            window.Importadora.Components.Toast.show('Documento eliminado', 'success');
+        }
+
+        /**
+         * Configurar subida de documentos (drag & drop)
+         */
+        setupDocumentUpload() {
+            const uploadArea = document.getElementById('uploadArea');
+            const selectFileBtn = document.getElementById('selectFileBtn');
+            const fileInput = document.getElementById('fileInput');
+
+            if (!uploadArea || !selectFileBtn || !fileInput) return;
+
+            // Click en botón seleccionar archivo
+            selectFileBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // Click en área de subida
+            uploadArea.addEventListener('click', (e) => {
+                if (e.target === uploadArea || e.target.closest('.upload-content')) {
+                    fileInput.click();
+                }
+            });
+
+            // Cambio en input de archivo
+            fileInput.addEventListener('change', (e) => {
+                this.handleFileUpload(e.target.files);
+            });
+
+            // Drag & drop
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                this.handleFileUpload(e.dataTransfer.files);
+            });
+        }
+
+        /**
+         * Manejar subida de archivos
+         * @param {FileList} files - Archivos a subir
+         */
+        handleFileUpload(files) {
+            if (!files || files.length === 0) return;
+
+            Array.from(files).forEach(file => {
+                console.log('📤 Subiendo archivo:', file.name, file.size, file.type);
+
+                // Simular subida (en memoria)
+                const newDoc = {
+                    id: `doc-${Date.now()}`,
+                    name: file.name,
+                    type: file.name.split('.').pop().toLowerCase(),
+                    size: this.formatFileSize(file.size),
+                    uploadDate: new Date().toISOString().split('T')[0]
+                };
+
+                // Agregar a la lista visualmente
+                this.addDocumentToList(newDoc);
+            });
+
+            window.Importadora.Components.Toast.show(`${files.length} archivo(s) subido(s)`, 'success');
+        }
+
+        /**
+         * Formatear tamaño de archivo
+         * @param {number} bytes - Tamaño en bytes
+         * @returns {string} Tamaño formateado
+         */
+        formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        /**
+         * Agregar documento a la lista visual
+         * @param {object} doc - Documento a agregar
+         */
+        addDocumentToList(doc) {
+            const documentsList = document.getElementById('documentsList');
+            if (!documentsList) return;
+
+            // Eliminar mensaje de "no documentos" si existe
+            const noDocsMsg = documentsList.querySelector('.no-documents');
+            if (noDocsMsg) noDocsMsg.remove();
+
+            const docHtml = `
+                <div class="document-item" data-document-id="${doc.id}" style="animation: slideIn 0.3s ease;">
+                    <div class="document-icon">
+                        <i class="${this.getFileIcon(doc.type)}"></i>
+                    </div>
+                    <div class="document-info">
+                        <h4>${doc.name}</h4>
+                        <div class="document-meta">
+                            <span>${doc.uploadDate}</span>
+                            <span>•</span>
+                            <span>${doc.size}</span>
+                        </div>
+                    </div>
+                    <div class="document-actions">
+                        <button class="btn btn-outline download-doc-btn" data-document-id="${doc.id}">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="btn btn-outline delete-doc-btn" data-document-id="${doc.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            documentsList.insertAdjacentHTML('beforeend', docHtml);
+
+            // Agregar event listeners para los nuevos botones
+            const newDocItem = documentsList.lastElementChild;
+            newDocItem.querySelector('.download-doc-btn').addEventListener('click', () => {
+                this.downloadDocument(doc.id);
+            });
+            newDocItem.querySelector('.delete-doc-btn').addEventListener('click', () => {
+                this.deleteDocument(doc.id, null);
+            });
         }
 
     }
