@@ -26,14 +26,15 @@
 
 .header-left .logo {
     display: flex;
+    flex-direction: row;
     align-items: center;
     gap: var(--spacing-md);
 }
 
 .header-left .logo .logo-img {
-    height: 40px;
+    height: 80px;
     width: auto;
-    max-width: 200px;
+    max-width: 400px;
     object-fit: contain;
 }
 

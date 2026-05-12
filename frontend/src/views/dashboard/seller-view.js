@@ -45,7 +45,7 @@
                     <header class="dashboard-header">
                         <div class="header-left">
                             <div class="logo">
-                                <i class="fas fa-car"></i>
+                                <img src="/public/logo.png" alt="Logo" class="logo-img">
                                 <h1>Importadora Nissan</h1>
                             </div>
                         </div>

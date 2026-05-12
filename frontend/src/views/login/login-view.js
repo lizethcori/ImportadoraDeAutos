@@ -60,7 +60,7 @@
                     <div class="login-card">
                         <div class="login-header">
                             <div class="logo">
-                                <i class="fas fa-car"></i>
+                                <img src="/public/logo.png" alt="Logo" class="logo-img">
                                 <h1>Importadora Nissan</h1>
                                 <span class="tagline">Sistema Profesional</span>
                             </div>
