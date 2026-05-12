@@ -134,6 +134,63 @@
         }
 
         /**
+         * Agregar nuevo vehículo
+         */
+        async addVehicle(vehicleData) {
+            console.log('🚗 Mock Backend: Adding vehicle', vehicleData);
+
+            try {
+                await this.simulateNetworkDelay(800);
+
+                if (this.simulateRandomError()) {
+                    throw new Error('Error al agregar vehículo');
+                }
+
+                // Agregar vehículo a los datos mock (estructura correcta: MockVehicles es un array directo)
+                window.Importadora.Data.MockVehicles.push(vehicleData);
+
+                console.log('🚗 Mock Backend: Vehicle added successfully', vehicleData.id);
+                return { success: true, vehicle: vehicleData };
+
+            } catch (error) {
+                console.error('🚗 Mock Backend: Add vehicle error', error);
+                throw error;
+            }
+        }
+
+        /**
+         * Eliminar vehículo
+         */
+        async deleteVehicle(vehicleId) {
+            console.log('🚗 Mock Backend: Deleting vehicle', vehicleId);
+
+            try {
+                await this.simulateNetworkDelay(600);
+
+                if (this.simulateRandomError()) {
+                    throw new Error('Error al eliminar vehículo');
+                }
+
+                // Eliminar vehículo de los datos mock (estructura correcta: MockVehicles es un array directo)
+                const vehicles = window.Importadora.Data.MockVehicles;
+                const index = vehicles.findIndex(v => v.id === vehicleId);
+
+                if (index === -1) {
+                    throw new Error('Vehículo no encontrado');
+                }
+
+                vehicles.splice(index, 1);
+
+                console.log('🚗 Mock Backend: Vehicle deleted successfully', vehicleId);
+                return { success: true };
+
+            } catch (error) {
+                console.error('🚗 Mock Backend: Delete vehicle error', error);
+                throw error;
+            }
+        }
+
+        /**
          * Obtener todos los pedidos
          */
         async getOrders() {
@@ -218,7 +275,7 @@
          */
         async getUsers() {
             console.log('👥 Mock Backend: Getting all users');
-            
+
             try {
                 await this.simulateNetworkDelay();
 
@@ -228,11 +285,81 @@
 
                 const users = window.Importadora.Data.MockUsers.methods.getAll();
                 console.log('👥 Mock Backend: Retrieved', users.length, 'users');
-                
+
                 return users;
 
             } catch (error) {
                 console.error('👥 Mock Backend: Get users error', error);
+                throw error;
+            }
+        }
+
+        /**
+         * Agregar nuevo usuario
+         */
+        async addUser(userData) {
+            console.log('👥 Mock Backend: Adding user', userData);
+
+            try {
+                await this.simulateNetworkDelay(800);
+
+                if (this.simulateRandomError()) {
+                    throw new Error('Error al agregar usuario');
+                }
+
+                // Agregar usuario a los datos mock (estructura correcta)
+                // Agregar a all (que combina auth y management)
+                window.Importadora.Data.MockUsers.all.push(userData);
+
+                // Si es un usuario de gestión (no de auth), también agregar a management
+                if (userData.role !== 'admin' && userData.role !== 'vendedor') {
+                    window.Importadora.Data.MockUsers.management.push(userData);
+                }
+
+                console.log('👥 Mock Backend: User added successfully', userData.id);
+                return { success: true, user: userData };
+
+            } catch (error) {
+                console.error('👥 Mock Backend: Add user error', error);
+                throw error;
+            }
+        }
+
+        /**
+         * Eliminar usuario
+         */
+        async deleteUser(userId) {
+            console.log('👥 Mock Backend: Deleting user', userId);
+
+            try {
+                await this.simulateNetworkDelay(600);
+
+                if (this.simulateRandomError()) {
+                    throw new Error('Error al eliminar usuario');
+                }
+
+                // Eliminar usuario de los datos mock (estructura correcta)
+                const allUsers = window.Importadora.Data.MockUsers.all;
+                const index = allUsers.findIndex(u => u.id === userId);
+
+                if (index === -1) {
+                    throw new Error('Usuario no encontrado');
+                }
+
+                allUsers.splice(index, 1);
+
+                // También eliminar de management si está allí
+                const managementUsers = window.Importadora.Data.MockUsers.management;
+                const managementIndex = managementUsers.findIndex(u => u.id === userId);
+                if (managementIndex !== -1) {
+                    managementUsers.splice(managementIndex, 1);
+                }
+
+                console.log('👥 Mock Backend: User deleted successfully', userId);
+                return { success: true };
+
+            } catch (error) {
+                console.error('👥 Mock Backend: Delete user error', error);
                 throw error;
             }
         }
@@ -299,10 +426,14 @@
                     'login()',
                     'getVehicles()',
                     'getVehicleById()',
+                    'addVehicle()',
+                    'deleteVehicle()',
                     'getOrders()',
                     'getOrderById()',
                     'getOrderTracking()',
                     'getUsers()',
+                    'addUser()',
+                    'deleteUser()',
                     'createOrder()'
                 ]
             };
