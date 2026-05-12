@@ -53,7 +53,23 @@
             price: 45000, // Precio estimado
             type: 'Camión',
             priority: 'normal',
-            notes: 'Pedido en proceso de importación'
+            notes: 'Pedido en proceso de importación',
+            documents: [
+                {
+                    id: 'doc-001',
+                    name: 'Factura_ORD-001.pdf',
+                    type: 'pdf',
+                    size: '2.5 MB',
+                    uploadDate: '2024-01-15'
+                },
+                {
+                    id: 'doc-002',
+                    name: 'Poliza_Aduana.pdf',
+                    type: 'pdf',
+                    size: '1.8 MB',
+                    uploadDate: '2024-01-16'
+                }
+            ]
         },
         {
             id: 'ORD-002',
@@ -67,7 +83,8 @@
             price: 38000,
             type: 'Camión',
             priority: 'high',
-            notes: 'Esperando confirmación de cliente'
+            notes: 'Esperando confirmación de cliente',
+            documents: []
         },
         {
             id: 'ORD-003',
@@ -81,7 +98,16 @@
             price: 52000,
             type: 'Camión',
             priority: 'normal',
-            notes: 'Entregado exitosamente'
+            notes: 'Entregado exitosamente',
+            documents: [
+                {
+                    id: 'doc-003',
+                    name: 'Factura_ORD-003.pdf',
+                    type: 'pdf',
+                    size: '3.1 MB',
+                    uploadDate: '2023-12-10'
+                }
+            ]
         }
     ];
 
