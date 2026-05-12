@@ -1,4 +1,5 @@
 /* ============================================================
+
    DASHBOARD SECTIONS
    Section-specific styles: tracking/map, orders, history,
    notifications page, users table, finance, settings, badges,
@@ -247,9 +248,72 @@
 
 .custom-marker.current {
   background: #00d4ff;
-  width: 35px;
-  height: 35px;
-  animation: pulseGlow 2s infinite;
+}
+
+/* Vehicle Details Modal */
+.vehicle-details-modal {
+  display: flex;
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.vehicle-detail-image {
+  flex: 0 0 200px;
+  height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.vehicle-detail-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vehicle-detail-image .vehicle-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  color: var(--text-secondary);
+}
+
+.vehicle-detail-info {
+  flex: 1;
+}
+
+.vehicle-detail-info h3 {
+  margin: 0 0 15px 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+}
+
+.vehicle-detail-description {
+  margin: 15px 0;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.vehicle-detail-description p {
+  margin: 5px 0;
+}
+
+.vehicle-detail-features {
+  margin: 15px 0;
+}
+
+.vehicle-detail-features ul {
+  margin: 5px 0;
+  padding-left: 20px;
+}
+
+.vehicle-detail-features li {
+  margin: 5px 0;
+  color: var(--text-secondary);
 }
 
 .custom-marker i {
@@ -263,6 +327,35 @@
   border-radius: 50%;
   border: 2px solid white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Profile Info Display */
+.profile-info-display {
+  padding: 20px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.info-value {
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
 }
 
 .custom-marker.origin i  { width:40px; height:40px; line-height:40px; font-size:18px; background:#28a745; }

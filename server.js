@@ -14,19 +14,13 @@ app.use(express.urlencoded({ extended: true }));
 // Servir archivos estáticos del frontend
 app.use(express.static(path.join(__dirname, 'frontend')));
 
-// Ruta principal - servir el login
+// Ruta principal - servir el nuevo sistema SPA
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend/pages/index.html'));
+    res.sendFile(path.join(__dirname, 'frontend/public/index.html'));
 });
 
-// Rutas para las páginas (para que funcionen las redirecciones)
-app.get('/pages/:page', (req, res) => {
-    const page = req.params.page;
-    res.sendFile(path.join(__dirname, `frontend/pages/${page}`));
-});
-
-// Rutas para assets
-app.get('/assets/:type/:file', (req, res) => {
+// Rutas para assets del nuevo sistema
+app.get('/src/:type/:file', (req, res) => {
     const type = req.params.type;
     const file = req.params.file;
     
@@ -35,7 +29,7 @@ app.get('/assets/:type/:file', (req, res) => {
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
     
-    res.sendFile(path.join(__dirname, `frontend/assets/${type}/${file}`));
+    res.sendFile(path.join(__dirname, `frontend/src/${type}/${file}`));
 });
 
 // API endpoint simple para login (simulado)

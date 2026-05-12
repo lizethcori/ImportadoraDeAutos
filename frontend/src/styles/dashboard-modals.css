@@ -85,6 +85,11 @@
   overflow-y: auto;
 }
 
+.modal-large {
+  max-width: 900px;
+  width: 90%;
+}
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;

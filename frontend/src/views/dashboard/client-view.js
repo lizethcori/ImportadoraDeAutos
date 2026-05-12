@@ -70,24 +70,6 @@
                     <div class="dashboard-main">
                         <!-- Sidebar -->
                         <aside class="sidebar">
-                            <div class="user-profile">
-                                <div class="profile-avatar"><i class="fas fa-user"></i></div>
-                                <div class="profile-info">
-                                    <h3 class="profile-name" id="profileName">${this.currentUser?.name || 'Cliente'}</h3>
-                                    <p class="profile-email" id="profileEmail">${this.currentUser?.email || 'cliente@email.com'}</p>
-                                    <div class="profile-stats">
-                                        <div class="stat">
-                                            <span class="stat-value" id="totalPurchases">3</span>
-                                            <span class="stat-label">Compras</span>
-                                        </div>
-                                        <div class="stat">
-                                            <span class="stat-value" id="clientLevel">Oro</span>
-                                            <span class="stat-label">Nivel</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <nav class="sidebar-nav">
                                 <ul class="nav-list">
                                     <li class="nav-item">
@@ -115,9 +97,9 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link" data-section="history">
-                                            <i class="fas fa-history"></i>
-                                            <span>Historial</span>
+                                        <a href="#" class="nav-link" data-section="profile">
+                                            <i class="fas fa-user"></i>
+                                            <span>Perfil</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -240,40 +222,47 @@
                                 </div>
                             </section>
 
-                            <!-- History Section -->
-                            <section id="history" class="content-section">
+                            <!-- Profile Section -->
+                            <section id="profile" class="content-section">
                                 <div class="section-header">
                                     <div class="section-header-content">
-                                        <h2>Historial de Compras</h2>
-                                        <p class="section-description">Revisa tus vehículos comprados y estadísticas</p>
+                                        <h2>Información Personal</h2>
+                                        <p class="section-description">Gestiona tu información de perfil</p>
                                     </div>
                                 </div>
                                 <div class="content-grid">
                                     <div class="card">
-                                        <div class="section-header"><h3>Resumen de Actividad</h3></div>
-                                        <div class="stats-grid">
-                                            <div class="stat-item">
-                                                <div class="stat-icon"><i class="fas fa-car"></i></div>
-                                                <div class="stat-info"><span class="stat-number">3</span><span class="stat-label">Vehículos Comprados</span></div>
+                                        <div class="section-header">
+                                            <h3>Datos del Perfil</h3>
+                                        </div>
+                                        <div class="profile-info-display">
+                                            <div class="info-row">
+                                                <span class="info-label">Nombre:</span>
+                                                <span class="info-value" id="displayName">${this.currentUser?.name || 'Cliente'}</span>
                                             </div>
-                                            <div class="stat-item">
-                                                <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
-                                                <div class="stat-info"><span class="stat-number">$255,000</span><span class="stat-label">Total Invertido</span></div>
+                                            <div class="info-row">
+                                                <span class="info-label">Email:</span>
+                                                <span class="info-value" id="displayEmail">${this.currentUser?.email || 'cliente@email.com'}</span>
                                             </div>
-                                            <div class="stat-item">
-                                                <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                                                <div class="stat-info"><span class="stat-number">35 días</span><span class="stat-label">Tiempo Promedio</span></div>
+                                            <div class="info-row">
+                                                <span class="info-label">Teléfono:</span>
+                                                <span class="info-value">+1 234 567 890</span>
                                             </div>
-                                            <div class="stat-item">
-                                                <div class="stat-icon"><i class="fas fa-calendar"></i></div>
-                                                <div class="stat-info"><span class="stat-number">2024</span><span class="stat-label">Última Compra</span></div>
+                                            <div class="info-row">
+                                                <span class="info-label">Dirección:</span>
+                                                <span class="info-value">Av. Principal 123</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">Nivel:</span>
+                                                <span class="info-value">Oro</span>
+                                            </div>
+                                            <div class="info-row">
+                                                <span class="info-label">Total de Compras:</span>
+                                                <span class="info-value">3</span>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="section-header"><h3>Mis Vehículos Comprados</h3></div>
-                                        <div class="vehicles-history" id="vehiclesHistory">
-                                            <p style="text-align:center; padding:20px;">Cargando historial...</p>
+                                        <div class="form-actions">
+                                            <button class="btn btn-primary" id="editProfileBtn">Editar Perfil</button>
                                         </div>
                                     </div>
                                 </div>
@@ -294,7 +283,9 @@
 
                 this.loadCatalog(vehicles);
                 this.loadOrdersList(orders);
-                this.loadVehicleHistory();
+
+                // Re-setup event listeners after dynamic content is loaded
+                this.setupOrderActionButtons();
 
             } catch (error) {
                 console.error('❌ Error cargando datos del dashboard:', error);
@@ -317,8 +308,8 @@
                             <p class="vehicle-year">Año: ${v.year}</p>
                             <p class="vehicle-price">USD ${v.price?.toLocaleString()}</p>
                             <div class="vehicle-actions">
-                                <button class="btn btn-outline">Ver detalles</button>
-                                <button class="btn btn-primary">Solicitar importación</button>
+                                <button class="btn btn-outline vehicle-details-btn" data-vehicle-id="${v.id}">Ver detalles</button>
+                                <button class="btn btn-primary request-import-btn" data-vehicle-id="${v.id}">Solicitar importación</button>
                             </div>
                         </div>
                     </div>
@@ -340,8 +331,8 @@
                             <p class="vehicle-price">USD ${v.price?.toLocaleString()}</p>
                             <div class="delivery-info"><i class="fas fa-truck"></i><span>Entrega: 24-48 horas</span></div>
                             <div class="vehicle-actions">
-                                <button class="btn btn-outline">Ver detalles</button>
-                                <button class="btn btn-success">Comprar Ahora</button>
+                                <button class="btn btn-outline vehicle-details-btn" data-vehicle-id="${v.id}">Ver detalles</button>
+                                <button class="btn btn-success buy-now-btn" data-vehicle-id="${v.id}">Comprar Ahora</button>
                             </div>
                         </div>
                     </div>
@@ -372,42 +363,9 @@
                         <span class="progress-text">${order.progress || 0}% completado</span>
                     </div>
                     <div class="order-actions">
-                        <button class="btn btn-outline btn-sm">Ver Detalles</button>
-                        <button class="btn btn-primary btn-sm">Seguimiento</button>
-                        <button class="btn btn-success btn-sm">Chat con Vendedor</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        loadVehicleHistory() {
-            const history = document.getElementById('vehiclesHistory');
-            if (!history) return;
-
-            const vehicles = [
-                { name: 'Nissan Atlas 2024', order: '#ORD-003', price: 'USD 75,000', date: '15/04/2026', invoice: '#FAC-003' },
-                { name: 'Nissan Frontier 2023', order: '#ORD-004', price: 'USD 82,000', date: '20/03/2026', invoice: '#FAC-004' },
-                { name: 'Nissan Patrol 2023', order: '#ORD-005', price: 'USD 98,000', date: '10/02/2026', invoice: '#FAC-005' }
-            ];
-
-            history.innerHTML = vehicles.map(v => `
-                <div class="vehicle-history-item">
-                    <div class="vehicle-history-info">
-                        <div class="vehicle-history-header">
-                            <h4 class="vehicle-history-name">${v.name}</h4>
-                            <span class="vehicle-history-status status-completed">Entregado</span>
-                        </div>
-                        <div class="vehicle-history-details">
-                            <div class="detail-item"><i class="fas fa-tag"></i><span>Pedido: ${v.order}</span></div>
-                            <div class="detail-item"><i class="fas fa-dollar-sign"></i><span>Precio: ${v.price}</span></div>
-                            <div class="detail-item"><i class="fas fa-calendar-check"></i><span>Entrega: ${v.date}</span></div>
-                            <div class="detail-item"><i class="fas fa-file-contract"></i><span>Factura: ${v.invoice}</span></div>
-                        </div>
-                    </div>
-                    <div class="vehicle-history-actions">
-                        <button class="btn btn-outline btn-sm">Ver Documentos</button>
-                        <button class="btn btn-outline btn-sm">Ver Detalles</button>
-                        <button class="btn btn-primary btn-sm">Comprar Similar</button>
+                        <button class="btn btn-outline btn-sm view-details-btn" data-order-id="${order.id}">Ver Detalles</button>
+                        <button class="btn btn-primary btn-sm tracking-btn" data-order-id="${order.id}">Seguimiento</button>
+                        <button class="btn btn-success btn-sm chat-seller-btn" data-order-id="${order.id}">Chat con Vendedor</button>
                     </div>
                 </div>
             `).join('');
@@ -438,6 +396,9 @@
             // Order filters
             this.setupOrderFilters();
 
+            // Order action buttons
+            this.setupOrderActionButtons();
+
             // Chat
             this.setupChat();
         }
@@ -464,6 +425,123 @@
             });
         }
 
+        setupOrderActionButtons() {
+            // View Details buttons
+            document.querySelectorAll('.view-details-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const orderId = e.currentTarget.getAttribute('data-order-id');
+                    this.showOrderDetails(orderId);
+                });
+            });
+
+            // Tracking buttons
+            document.querySelectorAll('.tracking-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const orderId = e.target.getAttribute('data-order-id');
+                    this.showOrderTracking(orderId);
+                });
+            });
+
+            // Chat with seller buttons
+            document.querySelectorAll('.chat-seller-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const orderId = e.target.getAttribute('data-order-id');
+                    this.openChatWithSeller(orderId);
+                });
+            });
+
+            // Vehicle details buttons (catalog)
+            document.querySelectorAll('.vehicle-details-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const vehicleId = e.target.getAttribute('data-vehicle-id');
+                    this.showVehicleDetails(vehicleId);
+                });
+            });
+
+            // Request import buttons (catalog)
+            document.querySelectorAll('.request-import-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const vehicleId = e.target.getAttribute('data-vehicle-id');
+                    await this.requestImport(vehicleId);
+                });
+            });
+
+            // Buy now buttons (warehouse)
+            document.querySelectorAll('.buy-now-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const vehicleId = e.target.getAttribute('data-vehicle-id');
+                    await this.buyNow(vehicleId);
+                });
+            });
+        }
+
+        async showOrderTracking(orderId) {
+            // Navigate to tracking section
+            const trackingSection = document.getElementById('tracking');
+            if (trackingSection) {
+                // Update active section in sidebar
+                document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                const trackingLink = document.querySelector('.nav-link[data-section="tracking"]');
+                if (trackingLink) trackingLink.classList.add('active');
+
+                // Show tracking section
+                document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+                trackingSection.classList.add('active');
+
+                // Update tracking info with order data
+                try {
+                    const order = await this.mockBackend.getOrderById(orderId);
+
+                    if (order) {
+                        const statusEl = document.getElementById('currentStatus');
+                        const locationEl = document.getElementById('currentLocation');
+                        const progressFill = document.getElementById('progressFill');
+
+                        if (statusEl) statusEl.textContent = order.status;
+                        if (locationEl) locationEl.textContent = order.location || 'En proceso';
+                        if (progressFill) progressFill.style.width = `${order.progress || 0}%`;
+                    }
+                } catch (error) {
+                    console.error('Error al cargar tracking:', error);
+                    window.Importadora.Components.Toast.show('Error al cargar tracking', 'error');
+                }
+            }
+        }
+
+        async openChatWithSeller(orderId) {
+            // Navigate to chat section
+            const chatSection = document.getElementById('chat');
+            if (chatSection) {
+                // Update active section in sidebar
+                document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                const chatLink = document.querySelector('.nav-link[data-section="chat"]');
+                if (chatLink) chatLink.classList.add('active');
+
+                // Show chat section
+                document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+                chatSection.classList.add('active');
+
+                // Add initial message about the order
+                try {
+                    const order = await this.mockBackend.getOrderById(orderId);
+
+                    if (order) {
+                        const chatMessages = document.getElementById('chatMessages');
+                        if (chatMessages) {
+                            chatMessages.innerHTML = `
+                                <div class="message system-message">
+                                    <p>Consultando información del pedido #${order.id} - ${order.vehicle}</p>
+                                </div>
+                            `;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error al cargar pedido para chat:', error);
+                }
+            }
+        }
+
         setupChat() {
             window.Importadora.Components.Chat.init({
                 messagesId: 'chatMessages',
@@ -472,6 +550,346 @@
                 responderName: 'Vendedor',
                 autoReplyMessage: 'Recibido, te respondo a la brevedad.'
             });
+        }
+
+        setupProfileEdit() {
+            const editBtn = document.getElementById('editProfileBtn');
+            if (editBtn) {
+                editBtn.addEventListener('click', () => {
+                    this.toggleProfileEdit();
+                });
+            }
+        }
+
+        toggleProfileEdit() {
+            const profileDisplay = document.querySelector('.profile-info-display');
+            const isEditing = profileDisplay.classList.contains('editing');
+
+            if (isEditing) {
+                // Save changes and return to display mode
+                this.saveProfileChanges();
+            } else {
+                // Switch to edit mode
+                this.showProfileEditForm();
+            }
+        }
+
+        showProfileEditForm() {
+            const profileDisplay = document.querySelector('.profile-info-display');
+            const currentName = document.getElementById('displayName').textContent;
+            const currentEmail = document.getElementById('displayEmail').textContent;
+
+            profileDisplay.classList.add('editing');
+            profileDisplay.innerHTML = `
+                <div class="edit-profile-form">
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" id="editName" value="${currentName}" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="editEmail" value="${currentEmail}" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="tel" id="editPhone" value="+1 234 567 890" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Dirección</label>
+                        <input type="text" id="editAddress" value="Av. Principal 123" class="form-input">
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" id="saveProfileBtn">Guardar Cambios</button>
+                        <button class="btn btn-outline" id="cancelProfileBtn">Cancelar</button>
+                    </div>
+                </div>
+            `;
+
+            // Add event listeners for the new buttons
+            document.getElementById('saveProfileBtn').addEventListener('click', () => this.saveProfileChanges());
+            document.getElementById('cancelProfileBtn').addEventListener('click', () => this.cancelProfileEdit());
+
+            // Update the main button
+            const editBtn = document.getElementById('editProfileBtn');
+            editBtn.textContent = 'Cancelar Edición';
+            editBtn.classList.remove('btn-primary');
+            editBtn.classList.add('btn-outline');
+        }
+
+        saveProfileChanges() {
+            const newName = document.getElementById('editName').value;
+            const newEmail = document.getElementById('editEmail').value;
+            const newPhone = document.getElementById('editPhone').value;
+            const newAddress = document.getElementById('editAddress').value;
+
+            // Update display
+            document.getElementById('displayName').textContent = newName;
+            document.getElementById('displayEmail').textContent = newEmail;
+
+            // Update current user
+            if (this.currentUser) {
+                this.currentUser.name = newName;
+                this.currentUser.email = newEmail;
+            }
+
+            // Show success message
+            window.Importadora.Components.Toast.show('Perfil actualizado correctamente', 'success');
+
+            // Return to display mode
+            this.cancelProfileEdit();
+        }
+
+        cancelProfileEdit() {
+            const profileDisplay = document.querySelector('.profile-info-display');
+            const currentName = document.getElementById('displayName')?.textContent || 'Cliente';
+            const currentEmail = document.getElementById('displayEmail')?.textContent || 'cliente@email.com';
+
+            profileDisplay.classList.remove('editing');
+            profileDisplay.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">Nombre:</span>
+                    <span class="info-value" id="displayName">${currentName}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value" id="displayEmail">${currentEmail}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Teléfono:</span>
+                    <span class="info-value">+1 234 567 890</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Dirección:</span>
+                    <span class="info-value">Av. Principal 123</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Nivel:</span>
+                    <span class="info-value">Oro</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Total de Compras:</span>
+                    <span class="info-value">3</span>
+                </div>
+            `;
+
+            // Update the main button
+            const editBtn = document.getElementById('editProfileBtn');
+            editBtn.textContent = 'Editar Perfil';
+            editBtn.classList.remove('btn-outline');
+            editBtn.classList.add('btn-primary');
+        }
+
+        /**
+         * Comprar ahora - redirige al chat con vendedor
+         */
+        async buyNow(vehicleId) {
+            try {
+                const vehicle = await this.vehicleService.getById(vehicleId);
+
+                // Navigate to chat section
+                const chatSection = document.getElementById('chat');
+                if (chatSection) {
+                    // Update active section in sidebar
+                    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                    document.querySelector('.nav-link[data-section="chat"]').classList.add('active');
+
+                    // Show chat section
+                    document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+                    chatSection.classList.add('active');
+
+                    // Add initial message about the purchase
+                    const chatMessages = document.getElementById('chatMessages');
+                    if (chatMessages && vehicle) {
+                        chatMessages.innerHTML = `
+                            <div class="message system-message">
+                                <p>Interés en compra de: ${vehicle.brand} ${vehicle.model} (${vehicle.year})</p>
+                                <p>Precio: USD ${vehicle.price?.toLocaleString()}</p>
+                                <p>Disponible en almacén - Entrega 24-48 horas</p>
+                            </div>
+                        `;
+                    }
+
+                    // Focus on chat input
+                    const chatInput = document.getElementById('chatInput');
+                    if (chatInput) {
+                        chatInput.focus();
+                        chatInput.placeholder = `Escribe sobre la compra del ${vehicle.brand} ${vehicle.model}...`;
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar vehículo para compra:', error);
+                window.Importadora.Components.Toast.show('Error al cargar vehículo', 'error');
+            }
+        }
+
+        /**
+         * Solicitar importación - redirige al chat con vendedor
+         */
+        async requestImport(vehicleId) {
+            try {
+                const vehicle = await this.vehicleService.getById(vehicleId);
+
+                // Navigate to chat section
+                const chatSection = document.getElementById('chat');
+                if (chatSection) {
+                    // Update active section in sidebar
+                    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+                    document.querySelector('.nav-link[data-section="chat"]').classList.add('active');
+
+                    // Show chat section
+                    document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+                    chatSection.classList.add('active');
+
+                    // Add initial message about the import request
+                    const chatMessages = document.getElementById('chatMessages');
+                    if (chatMessages && vehicle) {
+                        chatMessages.innerHTML = `
+                            <div class="message system-message">
+                                <p>Solicitud de importación para: ${vehicle.brand} ${vehicle.model} (${vehicle.year})</p>
+                                <p>Precio: USD ${vehicle.price?.toLocaleString()}</p>
+                            </div>
+                        `;
+                    }
+
+                    // Focus on chat input
+                    const chatInput = document.getElementById('chatInput');
+                    if (chatInput) {
+                        chatInput.focus();
+                        chatInput.placeholder = `Escribe sobre la importación del ${vehicle.brand} ${vehicle.model}...`;
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar vehículo para importación:', error);
+                window.Importadora.Components.Toast.show('Error al cargar vehículo', 'error');
+            }
+        }
+
+        /**
+         * Mostrar detalles del vehículo en modal
+         */
+        async showVehicleDetails(vehicleId) {
+            try {
+                const vehicle = await this.vehicleService.getById(vehicleId);
+
+                if (!vehicle) {
+                    window.Importadora.Components.Toast.show('Vehículo no encontrado', 'error');
+                    return;
+                }
+
+                const modalBody = `
+                    <div class="vehicle-details-modal">
+                        <div class="vehicle-detail-image">
+                            <img src="${vehicle.image}" alt="${vehicle.brand} ${vehicle.model}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="vehicle-image-placeholder" style="display:none"><i class="fas fa-truck"></i></div>
+                        </div>
+                        <div class="vehicle-detail-info">
+                            <h3>${vehicle.brand} ${vehicle.model}</h3>
+                            <div class="detail-row">
+                                <span class="detail-label">Año:</span>
+                                <span class="detail-value">${vehicle.year}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Tipo:</span>
+                                <span class="detail-value">${vehicle.type}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Transmisión:</span>
+                                <span class="detail-value">${vehicle.transmission}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Combustible:</span>
+                                <span class="detail-value">${vehicle.fuel}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Asientos:</span>
+                                <span class="detail-value">${vehicle.seats}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Color:</span>
+                                <span class="detail-value">${vehicle.color}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Precio:</span>
+                                <span class="detail-value">USD ${vehicle.price?.toLocaleString()}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Disponibilidad:</span>
+                                <span class="detail-value ${vehicle.available ? 'status-completed' : 'status-pending'}">${vehicle.available ? 'Disponible' : 'No disponible'}</span>
+                            </div>
+                            <div class="vehicle-detail-description">
+                                <p class="detail-label">Descripción:</p>
+                                <p>${vehicle.description}</p>
+                            </div>
+                            <div class="vehicle-detail-features">
+                                <p class="detail-label">Características:</p>
+                                <ul>
+                                    ${vehicle.features?.map(f => `<li>${f}</li>`).join('') || 'Sin características'}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                window.Importadora.Components.Modal.open({
+                    title: 'Detalles del Vehículo',
+                    body: modalBody,
+                    size: 'large'
+                });
+            } catch (error) {
+                console.error('Error al cargar detalles del vehículo:', error);
+                window.Importadora.Components.Toast.show('Error al cargar detalles', 'error');
+            }
+        }
+
+        /**
+         * Mostrar detalles del pedido en modal
+         */
+        async showOrderDetails(orderId) {
+            try {
+                const order = await this.mockBackend.getOrderById(orderId);
+
+                if (!order) {
+                    window.Importadora.Components.Toast.show('Pedido no encontrado', 'error');
+                    return;
+                }
+
+                // Usar HTML simple con estilos inline para evitar problemas CSS
+                const modalBody = `
+                    <div style="color: white; padding: 10px;">
+                        <h4 style="color: white; margin: 0 0 15px 0; border-bottom: 2px solid var(--secondary-color); padding-bottom: 8px;">Información del Pedido</h4>
+                        <div style="margin: 10px 0;">
+                            <strong style="color: white;">ID del Pedido:</strong> <span style="color: white;">#${order.id}</span>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong style="color: white;">Vehículo:</strong> <span style="color: white;">${order.vehicle}</span>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong style="color: white;">Estado:</strong> <span style="color: ${order.status === 'EN TRANSPORTE' ? '#ffa500' : order.status === 'Pendiente' ? '#ff6b6b' : '#51cf66'};">${order.status}</span>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong style="color: white;">Fecha:</strong> <span style="color: white;">${order.date}</span>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong style="color: white;">Total:</strong> <span style="color: white;">${order.total || 'N/A'}</span>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong style="color: white;">Progreso:</strong> <span style="color: white;">${order.progress || 0}%</span>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong style="color: white;">Ubicación:</strong> <span style="color: white;">${order.location || 'En proceso'}</span>
+                        </div>
+                    </div>
+                `;
+
+                window.Importadora.Components.Modal.open({
+                    title: 'Detalles del Pedido',
+                    body: modalBody,
+                    size: 'normal'
+                });
+            } catch (error) {
+                console.error('Error al cargar detalles del pedido:', error);
+                window.Importadora.Components.Toast.show('Error al cargar detalles', 'error');
+            }
         }
 
     }
